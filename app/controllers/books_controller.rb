@@ -22,17 +22,23 @@ class BooksController < ApplicationController
   # POST /books or /books.json
   def create
     @book = Book.new(book_params)
+    if @book.save
+      redirect_to @book, notice: 'Book was successfully created.'
+    else 
+      render :new
+    end 
+  end 
 
-    respond_to do |format|
-      if @book.save
-        format.html { redirect_to @book, notice: "Book was successfully created." }
-        format.json { render :show, status: :created, location: @book }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @book.errors, status: :unprocessable_entity }
-      end
-    end
-  end
+  #   respond_to do |format|
+  #     if @book.save
+  #       format.html { redirect_to @book, notice: "Book was successfully created." }
+  #       format.json { render :show, status: :created, location: @book }
+  #     else
+  #       format.html { render :new, status: :unprocessable_entity }
+  #       format.json { render json: @book.errors, status: :unprocessable_entity }
+  #     end
+  #   end
+  # end
 
   # PATCH/PUT /books/1 or /books/1.json
   def update
@@ -64,8 +70,6 @@ class BooksController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def book_params
-      p "**********"
-      p params
-      params.require(:book).permit(:title, :memo)
+      params.require(:book).permit(:title, :memo, :author, :picture)
     end
 end
